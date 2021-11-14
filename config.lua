@@ -31,7 +31,7 @@ Config.RentLocation = { -- The location to draw the text to open menu
 Config.ReturnLocation = {
     [1] = {
         label = '[E] - Return', -- The text of the text shown at the coords
-        coords = vector3(-249.4867, -952.4614, 31.219993) -- The location to draw the text to return your vehicle
+        coords = vector3(0.0, 0.0, 0.0) -- The location to draw the text to return your vehicle
     },
     [2] = {
         label = '', -- The text of the text shown at the coords
