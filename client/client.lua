@@ -21,7 +21,7 @@ if Config.Draw3D then
             sleep = 2000
             if LocalPlayer.state['isLoggedIn'] then
                 local pos = GetEntityCoords(PlayerPedId())
-                local coords = vector3(-250.635, -954.1553, 31.219987)
+                local coords = Config.RentLocation
                 if #(pos - coords) < 5 then
                     sleep = 5
                     if #(pos - coords) < 1.2 then
