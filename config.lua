@@ -24,6 +24,8 @@ Config.RentLocation = { -- The location to draw the text to open menu
     }
 }
 
+Config.SpawnLocation = vector3(0.0, 0.0, 0.0) -- Where to spawn the vehicle (this will be overhauled in the future)
+
 Config.Cycles = {
     [1] = {
         label = 'BMX', -- Title in qb-menu

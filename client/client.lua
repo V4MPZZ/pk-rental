@@ -86,7 +86,7 @@ RegisterNetEvent('rental:client:spawnbike', function(data)
         exports['LegacyFuel']:SetFuel(veh, 100.0)
         SetEntityHeading(veh, 250.0)
         TriggerEvent("vehiclekeys:client:SetOwner", GetVehicleNumberPlateText(veh))
-    end, vector3(-249.0394, -952.4588, 31.220005), true)
+    end, Config.SpawnLocation, true)
 end)
 
 
