@@ -9,7 +9,7 @@ AddEventHandler('rental:client:mainmenu', function()
         },
         {
             header = "Cycles",
-            txt = "Rent a bicycle",
+            txt = "Rent a bicycle.",
             params = {
                 event = "rental:client:rentmenu",
             }
@@ -18,18 +18,21 @@ AddEventHandler('rental:client:mainmenu', function()
 end)
 
 RegisterNetEvent('rental:client:rentmenu', function()
-    exports['qb-menu']:openMenu({
-        {
-            header = "BMX",
-            txt = "Allegedly Tony Hawk donated this bike",
-            params = {
-                event = "rental:client:rentbike",
-                args = {
-                    bike = 'bmx'
+    local Menu = {}
+        for k, v in pairs(Config.Cycles) do
+            Menu[#Menu+1] = {
+                header = v.label,
+                txt = v.info,
+                params = {
+                    event = "rental:client:rentbike",
+                    args = {
+                        bike = v.modelhash,
+                        price = v.price
+                    }
                 }
             }
-        },
-    })
+        end
+    exports['qb-menu']:openMenu(Menu)
 end)
 
 RegisterNetEvent('rental:client:rentbike', function(data)
@@ -38,7 +41,6 @@ end)
 
 RegisterNetEvent('rental:client:spawnbike')
 AddEventHandler('rental:client:spawnbike', function(data)
-    print(1)
     QBCore.Functions.SpawnVehicle(data.bike, function(veh)
         SetVehicleNumberPlateText(veh, "RENT"..tostring(math.random(1000, 9999)))
         exports['LegacyFuel']:SetFuel(veh, 100.0)
