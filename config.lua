@@ -1,16 +1,18 @@
 Config = {}
 
+Config.Draw3D = true -- If false then make sure you use another script to trigger the event
+
 Config.Cycles = {
     [1] = {
-        label = 'BMX',
-        info = 'Allegedly Tony Hawk donated this bike.',
-        price = 25,
-        modelhash = 'bmx'
+        label = '', -- Title in qb-menu
+        info = '', -- Description in qb-menu
+        price = 0, -- Price of Rental
+        modelhash = '' -- Vehicle spawn code goes here
     },
     [2] = {
-        label = 'Scorcher',
-        info = 'Fast as fuck boy.',
-        price = 50,
-        modelhash = 'scorcher'
+        label = '', -- Title in qb-menu
+        info = '', -- Description in qb-menu
+        price = 0, -- Price of Rental
+        modelhash = '' -- Vehicle spawn code goes here
     }
 }
