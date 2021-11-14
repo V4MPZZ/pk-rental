@@ -3,7 +3,7 @@ game 'gta5'
 
 author 'Keegan'
 description 'Rental script using qb-menu'
-version '1.4.0'
+version 'v1.4.0'
 
 shared_script 'config.lua'
 
