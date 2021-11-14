@@ -1,4 +1,10 @@
 local QBCore = exports['qb-core']:GetCoreObject()
+local displayed = false
+
+RegisterNetEvent('QBCore:Client:OnPlayerLoaded')
+AddEventHandler('QBCore:Client:OnPlayerLoaded', function()
+	displayed = false
+end)
 
 local function DrawText3D(x, y, z, text)
     SetTextScale(0.35, 0.35)
@@ -20,14 +26,15 @@ if Config.Draw3D then
         while true do
             sleep = 2000
             if LocalPlayer.state['isLoggedIn'] then
-                local pos = GetEntityCoords(PlayerPedId())
-                local coords = Config.RentLocation
-                if #(pos - coords) < 5 then
-                    sleep = 5
-                    if #(pos - coords) < 1.2 then
-                        DrawText3D(coords.x, coords.y, coords.z, "[E] - Rent")
-                        if IsControlJustReleased(0, 38) then
-                            TriggerEvent('rental:client:mainmenu')
+                for k, v in pairs(Config.RentLocation) do
+                    local pos = GetEntityCoords(PlayerPedId())
+                    if #(pos - v.coords) < 5 then
+                        sleep = 5
+                        if #(pos - v.coords) < 1.2 then
+                            DrawText3D(v.coords.x, v.coords.y, v.coords.z, v.label)
+                            if IsControlJustReleased(0, 38) then
+                                TriggerEvent('rental:client:mainmenu')
+                            end
                         end
                     end
                 end
@@ -80,4 +87,21 @@ RegisterNetEvent('rental:client:spawnbike', function(data)
         SetEntityHeading(veh, 250.0)
         TriggerEvent("vehiclekeys:client:SetOwner", GetVehicleNumberPlateText(veh))
     end, vector3(-249.0394, -952.4588, 31.220005), true)
+end)
+
+
+Citizen.CreateThread(function()
+	while not displayed do
+        for k, v in pairs(Config.BlipCoords) do
+            local blip = AddBlipForCoord(v.coords.x, v.coords.y, v.coords.z)
+            SetBlipSprite(blip, 611)
+            SetBlipAsShortRange(blip, true)
+            SetBlipScale(blip, 0.7)
+            SetBlipColour(blip, 51)
+            BeginTextCommandSetBlipName("STRING")
+            AddTextComponentString(v.label)
+            EndTextCommandSetBlipName(blip)
+            displayed = true
+        end
+	end
 end)

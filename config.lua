@@ -2,14 +2,34 @@ Config = {}
 
 Config.Draw3D = true -- If false then make sure you use another script to trigger the event
 
-Config.RentLocation = vector3(0.0, 0.0, 0.0) -- The location to draw the text to open menu
+Config.BlipCoords = {
+    [1] = {
+        label = 'Bike Rental', -- Name shown when you click on the blip
+        coords = vector3(0.0, 0.0, 0.0) -- The location to place the blip on the map
+    },
+    [2] = {
+        label = '', -- Name shown when you click on the blip
+        coords = vector3(0.0, 0.0, 0.0) -- The location to place the blip on the map
+    }
+}
+
+Config.RentLocation = { -- The location to draw the text to open menu
+    [1] = {
+        label = '[E] - Rent', -- The text of the text shown at the coords
+        coords = vector3(0.0, 0.0, 0.0) -- The location to draw the text to open menu
+    },
+    [2] = {
+        label = '', -- The text of the text shown at the coords
+        coords = vector3(0.0, 0.0, 0.0) -- The location to draw the text to open menu
+    }
+}
 
 Config.Cycles = {
     [1] = {
-        label = '', -- Title in qb-menu
-        info = '', -- Description in qb-menu
-        price = 0, -- Price of Rental
-        modelhash = '' -- Vehicle spawn code goes here
+        label = 'BMX', -- Title in qb-menu
+        info = 'Do some sick tricks.', -- Description in qb-menu
+        price = 15, -- Price of Rental
+        modelhash = 'bmx' -- Vehicle spawn code goes here
     },
     [2] = {
         label = '', -- Title in qb-menu
