@@ -1,5 +1,8 @@
 local QBCore = exports['qb-core']:GetCoreObject()
 local displayed = false
+local savedvehicle1 = nil
+local savedvehicle2 = nil
+local savedvehicle3 = nil
 
 RegisterNetEvent('QBCore:Client:OnPlayerLoaded')
 AddEventHandler('QBCore:Client:OnPlayerLoaded', function()
@@ -38,6 +41,19 @@ if Config.Draw3D then
                         end
                     end
                 end
+
+                for k, v in pairs(Config.ReturnLocation) do
+                    local pos = GetEntityCoords(PlayerPedId())
+                    if #(pos - v.coords) < 5 then
+                        sleep = 5
+                        if #(pos - v.coords) < 1.2 then
+                            DrawText3D(v.coords.x, v.coords.y, v.coords.z, v.label)
+                            if IsControlJustReleased(0, 38) then
+                                TriggerEvent('rental:client:delete')
+                            end
+                        end
+                    end
+                end
             end
             Wait(sleep)
         end
@@ -63,20 +79,20 @@ end)
 
 RegisterNetEvent('rental:client:rentmenu', function()
     local Menu = {}
-        for k, v in pairs(Config.Cycles) do
-            Menu[#Menu+1] = {
-                header = v.label,
-                txt = v.info,
-                params = {
-                    isServer = true,
-                    event = "rental:server:paybike",
-                    args = {
-                        bike = v.modelhash,
-                        price = v.price
-                    }
+    for k, v in pairs(Config.Cycles) do
+        Menu[#Menu+1] = {
+            header = v.label,
+            txt = v.info,
+            params = {
+                isServer = true,
+                event = "rental:server:paybike",
+                args = {
+                    bike = v.modelhash,
+                    price = v.price
                 }
             }
-        end
+        }
+    end
     exports['qb-menu']:openMenu(Menu)
 end)
 
@@ -86,9 +102,33 @@ RegisterNetEvent('rental:client:spawnbike', function(data)
         exports['LegacyFuel']:SetFuel(veh, 100.0)
         SetEntityHeading(veh, 250.0)
         TriggerEvent("vehiclekeys:client:SetOwner", GetVehicleNumberPlateText(veh))
+        if savedvehicle1 == nil then
+            savedvehicle1 = NetworkGetNetworkIdFromEntity(veh)
+        elseif savedvehicle2 == nil then
+            savedvehicle2 = NetworkGetNetworkIdFromEntity(veh)
+        elseif savedvehicle3 == nil then
+            savedvehicle3 = NetworkGetNetworkIdFromEntity(veh)
+        end
     end, Config.SpawnLocation, true)
 end)
 
+RegisterNetEvent('rental:client:delete', function()
+    local ped = PlayerPedId()
+    local cleanup = NetworkGetNetworkIdFromEntity(GetVehiclePedIsIn(ped))
+    if cleanup == savedvehicle1 or cleanup == savedvehicle2 or cleanup == savedvehicle3 then
+        if savedvehicle1 ~= nil then
+            savedvehicle1 = nil
+        elseif savedvehicle2 ~= nil then
+            savedvehicle2 = nil
+        elseif savedvehicle3 ~= nil then
+            savedvehicle3 = nil
+        end
+        QBCore.Functions.DeleteVehicle(GetVehiclePedIsIn(ped))
+        TriggerServerEvent('rental:server:repay')
+    else
+        QBCore.Functions.Notify("Not the rental vehicle!", "error", 3500)
+    end
+end)
 
 Citizen.CreateThread(function()
 	while not displayed do
